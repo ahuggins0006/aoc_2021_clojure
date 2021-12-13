@@ -85,3 +85,14 @@
 
 (calc-power-consumption inputs3)
 ;; => 2250414
+
+
+;; PART TWO
+
+;; function to filter based on first digit
+
+
+(defn starts-with [decider input]
+  (if (= decider (first input)) input false ))
+
+(something \0 (first demo-input))
