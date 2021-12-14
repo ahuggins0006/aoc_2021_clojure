@@ -95,4 +95,20 @@
 (defn starts-with [decider input]
   (if (= decider (first input)) input false ))
 
-(something \0 (first demo-input))
+(starts-with \0 (first demo-input))
+;; => "00100"
+
+(filter #(starts-with \1 %) demo-input);; => ("11110" "10110" "10111" "10101" "11100" "10000" "11001")
+
+( (mcbd (mapv first demo-input)))
+(filter #(starts-with (mcbd (mapv first demo-input)) %) demo-input)
+
+(defn get-rating [definition input]
+  (let [sample-size (count input)]
+    (loop [i 0 remaining input]
+      (if (>= i sample-size) remaining (recur (inc i) (filter #(starts-with (definition remaining) %))))
+
+
+      )
+
+  ))
