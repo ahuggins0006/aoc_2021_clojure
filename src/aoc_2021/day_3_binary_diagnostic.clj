@@ -100,15 +100,19 @@
 
 (filter #(starts-with \1 %) demo-input);; => ("11110" "10110" "10111" "10101" "11100" "10000" "11001")
 
-( (mcbd (mapv first demo-input)))
-(filter #(starts-with (mcbd (mapv first demo-input)) %) demo-input)
+(= \a (first "a"))
+
+(defn most-common [pos input] (filter #(starts-with (first (pr-str (mcbd (mapv #(nth % pos) input)))) %) input))
+(most-common demo-input)
+;; => ("11110" "10110" "10111" "10101" "11100" "10000" "11001")
+(filter #(starts-with (first (pr-str (lcbd (mapv first demo-input)))) %) demo-input)
+;; => ("00100" "01111" "00111" "00010" "01010")
+
 
 (defn get-rating [definition input]
   (let [sample-size (count input)]
     (loop [i 0 remaining input]
-      (if (>= i sample-size) remaining (recur (inc i) (filter #(starts-with (definition remaining) %))))
-
-
+      (if (>= i sample-size) remaining (recur ;; what to do here?))
       )
 
   ))
