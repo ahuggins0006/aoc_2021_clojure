@@ -34,6 +34,7 @@
   (let [zero-or-one (apply compare (vals (sort (frequencies bin-vec))))]
     (case zero-or-one
       -1 1
+       0 1
        1 0)
     ))
 (->> first-col frequencies
@@ -53,6 +54,7 @@
   (let [zero-or-one (apply compare (vals (sort (frequencies bin-vec))))]
     (case zero-or-one
       -1 0
+      0 0
       1 1)))
 
 (mcbd first-col)
@@ -89,7 +91,35 @@
 
 ;; PART TWO
 
-normalized-demo-input
 (def a-col (mapv #(nth % 0) normalized-demo-input));; => (0 1 1 1 1 0 0 1 1 1 0 0)
+
+(defn get-col [pos input]
+  (mapv #(nth % pos) input))
 (mcbd a-col)
+
+(get-col 2 normalized-demo-input)
+;; => [1 1 1 1 1 1 1 1 0 0 0 0]
 (filter #(= 1 (nth % 1)) normalized-demo-input)
+;; => ([1 1 1 1 0] [0 1 1 1 1] [1 1 1 0 0] [1 1 0 0 1] [0 1 0 1 0])
+(mcbd (get-col 0 normalized-demo-input))
+;; => 1
+(defn find-common [definition input]
+  (loop [i 0 rem input]
+    (if (= 1 (count rem)) rem
+        (recur (inc i) (filter #(= (definition (get-col i rem)) (nth % i)) rem))
+
+        )))
+
+(find-common mcbd normalized-demo-input)
+;; => ([1 0 1 1 1])
+
+(find-common lcbd normalized-demo-input);; => ([0 1 0 1 0])
+(def normalized-inputs3 (mapv normalize-input inputs3))
+(def oxygen-rating  (apply str (first (find-common mcbd normalized-inputs3 ))))
+(def c02-rating  (apply str (first (find-common lcbd normalized-inputs3 ))))
+
+(defn calc-life-supp-rating [oxy-rating c02-rating]
+(reduce * (map #(Integer/parseInt % 2) [oxy-rating c02-rating])))
+
+(calc-life-supp-rating oxygen-rating c02-rating)
+;; => 6085575
